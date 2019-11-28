@@ -19,13 +19,9 @@ def hasDouble(string):
 
 nice = 0
 for word in words:
-    acount = len(list(filter(lambda s : s == "a", list(word))))
-    ecount = len(list(filter(lambda s : s == "e", list(word))))
-    icount = len(list(filter(lambda s : s == "i", list(word))))
-    ocount = len(list(filter(lambda s : s == "o", list(word))))
-    ucount = len(list(filter(lambda s : s == "u", list(word))))
 
-    if (acount + ecount + icount + ocount + ucount < 3):
+    vowelCount = sum([word.count(vowel) for vowel in list('aeiou')])
+    if vowelCount < 3:
         continue
 
     if not hasDouble(word):
