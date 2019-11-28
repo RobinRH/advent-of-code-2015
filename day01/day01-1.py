@@ -2,16 +2,12 @@
 
 import sys
 
-filename = sys.argv[1]
-with open(filename, 'r') as inputFile:
-    content = inputFile.read()
-
-directions = list(content)
+directions = list(open(sys.argv[1], 'r').read())
 
 # ( is up one floor
 # ) is down one floor
 # destination = numberUp - numberDown
 
-numberUp = len(list(filter(lambda s : s == "(", directions)))
-numberDown = len(list(filter(lambda s : s == ")", directions)))
-print numberUp - numberDown
+numberUp = directions.count('(')
+numberDown = directions.count(')')
+print(numberUp - numberDown)
