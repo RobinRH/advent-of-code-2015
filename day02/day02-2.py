@@ -10,13 +10,9 @@ filename = sys.argv[1]
 with open(filename, 'r') as inputFile:
     packageSizes = inputFile.readlines()
 
-total = 0
-for package in packageSizes:
-    edges = package.strip().split("x")
-    edges = map((lambda x : int(x)), edges)
-    [l, w, h] = edges
-    bow = l * w * h
-    smallest = 2 * (sum(edges) - max(edges))
-    total += bow + smallest
-
-print total
+packages = [package.strip().split('x') for package in packageSizes]
+edges = [(int(x), int(y), int(z)) for (x, y, z) in packages]
+areas = [2 * (l*w + w*h + l*h) for (l, w, h) in edges]
+bows = [l*w*h for (l, w, h) in edges]
+smalls = [2 * (sum(e) - max(e)) for e in edges]
+print(sum(bows) + sum(smalls))
