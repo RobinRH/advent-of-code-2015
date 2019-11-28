@@ -4,22 +4,16 @@
 
 import sys
 
-filename = sys.argv[1]
-with open(filename, 'r') as inputFile:
-    content = inputFile.read()
-
-directions = list(content)
+directions = list(open(sys.argv[1], 'r').read())
 
 floor = 0
-finalStep = 0
-for index in range(0, len(directions)) :
-    if (directions[index] == "(") :
-        floor += 1
-    else:
-        floor -= 1
+index = 0
+for step in directions :
+    floor += 1 if step == '(' else -1
 
     if (floor < 0) :
-        finalStep = index + 1
         break
 
-print finalStep
+    index += 1
+
+print(index + 1)
