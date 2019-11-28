@@ -9,7 +9,8 @@ count = 0
 for count in range(0, 2000000):
     string = start + str(count)
     m = hashlib.md5()
-    m.update(string)
+    m.update(string.encode('utf-8'))
     digest = m.hexdigest()
     if str(digest).startswith("00000"):
-        print count, digest
+        print(count, digest)
+        break
