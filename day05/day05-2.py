@@ -12,6 +12,8 @@ filename = sys.argv[1]
 with open(filename, 'r') as inputFile:
     words = inputFile.readlines()
 
+words = [word.strip() for word in words]
+
 alphabet = list(string.ascii_lowercase)
 def hasLetterRepeat(word):
     for letter in alphabet:
@@ -23,33 +25,13 @@ def hasLetterRepeat(word):
     return False
 
 def hasTwoRepeat(word):
-    # make list of all the pairs
-    pairs = set()
-    chars = list(word)
-    for index in range(0, len(word) - 1):
-        pairs.add(chars[index] + chars[index+1])
-
-    for pr in pairs:
-        expr = ".*" + pr + ".*" + pr
-        p = re.compile(expr)
-        m = p.match(word)        
-        if m:
+    for index in range(0, len(word) - 4+ 1):
+        if (word[index:index+2] in word[index+2:]):
             return True
-        
+    
     return False
 
-nice = 0
-for word in words:
-    word = word.strip()
-    if not hasLetterRepeat(word):
-        continue
-
-    if not hasTwoRepeat(word):
-        continue
-
-    print word
-    nice += 1
-
+nice = sum([hasLetterRepeat(word) and hasTwoRepeat(word) for word in words])
 
 print(nice)
 
