@@ -8,26 +8,24 @@ import sys
 
 filename = sys.argv[1]
 with open(filename, 'r') as inputFile:
-    content = inputFile.read()
-
-ns = 0
-ew = 0
-directions = list(content)
+    directions = list(inputFile.read())
 
 visited = set()
-visited.add((ns, ew))
+
+moves = {
+    '^' : (0, 1),
+    'v' : (0, -1),
+    '>' : (1, 0),
+    '<' : (-1, 0)
+}
+
+location = (0,0)
+visited.add(location)
 
 for move in directions:
-    if move == '^':     # north
-        ns += 1
-    elif move == 'v':   # south
-        ns -= 1
-    elif move == '>':   # east
-        ew += 1
-    else:               # west
-        ew -= 1
+    diff = moves[move]
+    location = (location[0]+ diff[0], location[1] + diff[1])
+    visited.add(location)
 
-    visited.add((ns, ew))
-
-print("total packages: " + str(len(content) + 1))
+print("total packages: " + str(len(directions) + 1))
 print("total houses: " + str(len(visited)))
