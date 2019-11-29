@@ -7,14 +7,13 @@ import sys
 
 filename = sys.argv[1]
 with open(filename, 'r') as inputFile:
-    lines = inputFile.readlines()
-
-lines = list(map(lambda s: s.strip(), lines))
+    lines = [line.strip() for line in inputFile.readlines()]
 
 totalOutside = 0
 totalInside = 0
 for line in lines:
     totalOutside += len(line)
-    totalInside += len(line.decode('string_escape')) - 2
+    bline = bytes(line, encoding='utf-8')
+    totalInside += len(bytes(bline.decode('unicode_escape'), 'latin1')) - 2
 
-print totalOutside - totalInside
+print(totalOutside - totalInside)
