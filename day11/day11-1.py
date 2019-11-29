@@ -5,24 +5,12 @@
 # test input: ghijklmn output: ghjaabcc
 # https://adventofcode.com/2015/day/11
 
+# ord (returns number) and chr (returns letter)
 
 import sys
 import string
 
 input = sys.argv[1]
-
-alphabet = string.ascii_lowercase
-
-def increment(password):
-
-    index = alphabet.find(password[7])
-    if index + 1 <= 25:
-        newPassword = password[0:-1] + alphabet[index + 1]
-        return newPassword
-    else:
-        newPassword = password[0:-1] + "a"
-        newPassword = incrementByPlace(newPassword, 6)
-        return newPassword
 
 def incrementByPlace(password, place):
 
@@ -32,8 +20,8 @@ def incrementByPlace(password, place):
 
     if password[place] != 'z':
         # increment the place
-        index = alphabet.find(password[place])
-        newChar = alphabet[index + 1]
+        index = ord(password[place])
+        newChar = chr(index+1)
         newPassword = password[0:place] + newChar + password[place + 1:]
         return newPassword
     else:
@@ -46,11 +34,8 @@ def incrementByPlace(password, place):
 # like abc, bcd, cde, and so on, up to xyz. They cannot skip letters; abd doesn't count.
 def containsStraight(password):
     for index in range(len(password) - 3):
-        i1 = alphabet.find(password[index])
-        i2 = alphabet.find(password[index + 1])
-        i3 = alphabet.find(password[index + 2])
+        i1, i2, i3 = [ord(x) for x in password[index:index+3]]
         if (i2 == i1 + 1) and (i3 == i1 + 2):
-            #print "straight: ", password
             return True
 
     return False
@@ -72,31 +57,15 @@ def noIOL(password):
 
 # Passwords must contain at least two different, non-overlapping pairs of letters, like aa, bb, or zz.
 # create all the pairs
-pairs = []
-for c in alphabet:
-    pairs.append(c + c)
-#print pairs
+pairs = [c + c for c in string.ascii_lowercase]
 
 def hasPairs(password):
+    number = sum([password.count(p) for p in pairs])
+    return number >= 2
 
-    count = 0
-    for pair in pairs:
-        if pair in password:
-            count += 1
-            if count >= 2:
-                #print password
-                return True
-
-    return False
-
-valid = False
-while not valid:
-    input = increment(input)
-
-    if containsStraight(input) and noIOL(input) and hasPairs(input):
-        valid = True
-
-print input
-
-
-
+total = 0
+while total < 2:
+    input = incrementByPlace(input, len(input) - 1)
+    if noIOL(input) and containsStraight(input) and hasPairs(input):
+        print(input)
+        total += 1
