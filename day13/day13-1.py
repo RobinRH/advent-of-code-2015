@@ -2,58 +2,31 @@
 # https://adventofcode.com/2015/day/13
 
 import sys
-import pprint
-import re
 import itertools
 
+# Alice would gain 54 happiness units by sitting next to Bob.
+# Mallory gain 40 Eric
 filename = sys.argv[1]
-
 with open(filename, 'r') as inputFile:
-    lines = inputFile.readlines()
+    lines = [line.strip().replace('would ', '').replace('happiness units by sitting next to ', '').replace('.', '').split(' ') for line in inputFile.readlines()]
 
-#Alice would gain 54 happiness units by sitting next to Bob.
-#Alice would lose 81 happiness units by sitting next to Carol.
-ruleExpr = re.compile('(?P<name1>.+) would (?P<gainLose>gain|lose) (?P<units>\d+) happiness units by sitting next to (?P<name2>.+)\.')
 rules = {}
 names = set()
 
-# create a rule for each line in the input file
-for line in lines:
-    match = ruleExpr.match(line)
-    if match:
-        name1 = match.group('name1')
-        name2 = match.group('name2')
-        gainLose = match.group('gainLose')
-        units = match.group('units')
-        units = int(units)
-        if gainLose == "lose":
-            units = -units
-        rules[(name1, name2)] = units
-        names.add(name1)
-        names.add(name2)
-
-#pprint.pprint(lines)
-#pprint.pprint(rules)
-#pprint.pprint(names)
+for name1, gainLose, units, name2 in lines:
+    rules[(name1, name2)] = int(units) if gainLose == 'gain' else -int(units)
+    names = names.union(set([name1, name2]))
 
 # create all possible seatings
-# there in an array, but we will treat it as a circular array
-allSeatings = list(itertools.permutations(names))
+# they're in an array, but we will treat it as a circular array
+allSeatings = [list(s) for s in itertools.permutations(names)]
 
 # find the total happiness for each possible seating
 results = []
 for seating in allSeatings:
-    happiness = 0
-    for index in range(0, len(seating)):
-        name1 = seating[index]
-        name2 = ""
-        if index == len(seating) - 1:
-            name2 = seating[0]
-        else:
-            name2 = seating[index+1]
-        happiness += rules[(name1, name2)]  # A likes to sit by B
-        happiness += rules[(name2, name1)]  # but maybe B doesn't like to sit by A
+    pairs = list(zip(seating, seating[1:] + [seating[0]]))
+    happiness = sum([rules[(name1, name2)] + rules[(name2, name1)] for name1, name2 in pairs])
     results.append(happiness)
 
-print max(results)
+print(max(results))
 
