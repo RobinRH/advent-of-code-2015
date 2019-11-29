@@ -3,7 +3,6 @@
 # https://adventofcode.com/2015/day/9
 
 import sys
-import string
 import re
 import pprint
 import itertools
@@ -11,8 +10,6 @@ import itertools
 filename = sys.argv[1]
 with open(filename, 'r') as inputFile:
     lines = inputFile.readlines()
-
-alphabet = list(string.ascii_lowercase)
 
 # AlphaCentauri to Snowdin = 66
 distanceExpr = re.compile('(.+) to (.+) = (\d+)')
@@ -52,5 +49,35 @@ for path in allPaths:
 
     pathLengths.append(pathLength)
 
-print "min: ", min(pathLengths)
-print "max: ", max(pathLengths)
+print("min: ", min(pathLengths))
+print("max: ", max(pathLengths))
+
+# alternative solution
+# AlphaCentauri to Snowdin = 66
+
+filename = sys.argv[1]
+with open(filename, 'r') as inputFile:
+    lines = [line.strip().split(' ') for line in inputFile.readlines()]
+
+distances = {(start, end) : int(distance) for (start, skip1, end, skip2, distance) in lines}
+distancesB = {(end, start) : int(distance) for (start, skip1, end, skip2, distance) in lines}
+distances.update(distancesB)
+
+cities = []
+for endpoints in distances.keys():
+    cities.extend(endpoints)
+cities = set(cities)
+
+allPaths = list(itertools.permutations(cities))
+length = len(cities)
+pathDistances = []
+for path in allPaths:
+    legs = list(zip(path[0:length-1], path[1:]))
+    pathLength = sum([distances[(start, end)] for (start, end) in legs])
+    pathDistances.append(pathLength)
+
+print(min(pathDistances))
+print(max(pathDistances))
+
+
+
