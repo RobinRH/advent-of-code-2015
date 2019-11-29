@@ -13,7 +13,7 @@ with open(filename, 'r') as inputFile:
 numbers = re.findall('-?\d+', json)
 
 # map strings to ints
-numbers = map((lambda x : int(x)), numbers)
+numbers = [int(x) for x in numbers]
 
 # sum
-print sum(numbers)
+print(sum(numbers))
