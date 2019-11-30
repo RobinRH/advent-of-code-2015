@@ -37,7 +37,16 @@ def evaluateRecipe(tSugar, tSprinkles, tCandy, tChocolate):
     score = capacity * durability * flavor * texture
     return score
 
+def countCalories(tSugar, tSprinkles, tCandy, tChocolate):
+    calories = tSugar * sugar.calories + tSprinkles * sprinkles.calories + tCandy * candy.calories + tChocolate * chocolate.calories
+    return calories
+
+
 limit = 100
 recipes = [(su, sp, ca, limit - (su + sp + ca)) for su in range(0, limit + 1) for sp in range(0, limit - su + 1) for ca in range(0, limit - (su+sp) + 1)]
 scores = [evaluateRecipe(su, sp, ca, ch) for su, sp, ca, ch in recipes]
-print(max(scores))
+calories = [countCalories(su, sp, ca, ch) for su, sp, ca, ch in recipes]
+scoreCalorie = list(zip(scores, calories))
+score500 = [score for score, calories in scoreCalorie if calories == 500]
+print('part 1: ', max(scores))
+print('part 2: ', max(score500))
