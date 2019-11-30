@@ -3,7 +3,6 @@
 # https://adventofcode.com/2015/day/20
 
 import math
-import functools
 
 def primeFactors(n): 
     # https://www.geeksforgeeks.org/print-all-prime-factors-of-a-given-number/
@@ -34,16 +33,16 @@ def sumOfFactors(factors):
     # https://www.math.upenn.edu/~deturck/m170/wk3/lecture/sumdiv.html
 
     unique = set(factors)
-    #twos = list(filter(lambda x: x == 2, factors))
 
     product = 1
     for p in unique:
-        k = len(list(filter(lambda x: x == p, factors)))
+        k = factors.count(p)
         sumpk = ((p ** (k + 1)) -1)/ (p - 1)
-        #print sumpk
         product *= sumpk
 
     return product
+
+
 
 howMany = 34000000
 n = 0
@@ -51,30 +50,11 @@ while True:
     n += 1
     factors = primeFactors(n)
     gifts = sumOfFactors(factors) * 10
-    if n % 10000 == 0: print n, gifts
+    if n % 10000 == 0: print(n, gifts)
     #print n, factors, uniques
     #print n, gifts
     if gifts > howMany: break
 
-print n
+print(n)
 
-
-'''
-howMany = 3400000
-found = False
-houseNumber = 960000
-while not found:
-    gifts = 0
-    for elf in range(1, (houseNumber / 2) + 1):
-        if houseNumber % elf == 0: # then elf visits the house
-            gifts += elf
-            if gifts >= howMany:
-                print houseNumber
-                exit()
-    gifts += houseNumber
-    print houseNumber, gifts, howMany - gifts
-    #if houseNumber % 1000 == 0: print houseNumber, gifts
-    houseNumber += 96
-
-'''
 
