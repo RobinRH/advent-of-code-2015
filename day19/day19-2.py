@@ -40,20 +40,20 @@ while not found:
     count = 0
     mutations = 0
     random.shuffle(keysShuffled)
-    while input <> 'e':
+    while input != 'e':
         for s in keysShuffled:
             mutations += current.count(s)
             current = current.replace(s, replacements[s])
         count += 1
         if count > 20:
-            print current
+            # print('might need to rerun several times to get answers, uses randomization')
+            # print(current)
             break
         if current == 'e':
             found = True
-            pprint.pprint(keysShuffled)
-            print mutations
-            exit()
+            # pprint.pprint(keysShuffled)
+            # print(mutations)
             break
 
-print mutations
+print(mutations)
 
