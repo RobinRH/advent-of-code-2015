@@ -1,4 +1,5 @@
-# 40
+# part 1: 40
+# part 2: 241
 # https://adventofcode.com/2015/day/16
 
 
@@ -37,8 +38,31 @@ for line in lines:
         sueDict[match.group('name3')] = int(match.group('number3'))
         sues[int(match.group('id'))] = sueDict
 
+sues2 = sues.copy()
 for clue, value in clues.items():
-    sues = {id:s for id, s in sues.items() if (clue in s.keys() and s[clue] == value) or not clue in s.keys()}
+    sues2 = {id:s for id, s in sues2.items() if (clue in s.keys() and s[clue] == value) or not clue in s.keys()}
 
-print(list(sues.keys())[0])
+print('part 1: ', list(sues2.keys())[0])
+
+
+def evaluate(onesue):
+    for clue in ['cats', 'trees']:
+        if clue in onesue.keys() and onesue[clue] <= clues[clue]:
+            # print(clue, onesue)
+            return False
+
+    for clue in ['pomeranians', 'goldfish']:
+        if clue in onesue.keys() and onesue[clue] >= clues[clue]:
+            # print(clue, onesue)
+            return False
+
+    for clue in ['children', 'samoyeds', 'akitas', 'vizslas', 'cars', 'perfumes']:
+        if clue in onesue.keys() and onesue[clue] != clues[clue]:
+            # print(clue, onesue)
+            return False
+    
+    return True
+
+sues3 = [id for id, s in sues.items() if evaluate(s)]
+print('part 2: ', sues3[0])
 
