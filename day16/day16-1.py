@@ -21,7 +21,6 @@ clues = {
 
 
 filename = sys.argv[1]
-
 with open(filename, 'r') as inputFile:
     lines = inputFile.readlines()
 
@@ -38,30 +37,8 @@ for line in lines:
         sueDict[match.group('name3')] = int(match.group('number3'))
         sues[int(match.group('id'))] = sueDict
 
+for clue, value in clues.items():
+    sues = {id:s for id, s in sues.items() if (clue in s.keys() and s[clue] == value) or not clue in s.keys()}
 
-# look at each clue
-# if a sue has that clue, but the number is not a match, eliminate that sue
-for clue in clues.keys():
-    # you can't modify a iterable in the loop (I don't think), so add a marker to ignore
-    for sue in sues.keys():
-        sueDict = sues[sue]
-        if "skip" in sueDict.keys():
-            continue
-
-        # clue is a string like "goldfish"
-        number = clues[clue]
-        if clue in sueDict.keys() and sueDict[clue] <> number:
-            sueDict["skip"] = 0
-
-# see what's left
-for sue in sues.keys():
-    sueDict = sues[sue]
-    if "skip" in sueDict.keys():
-        continue
-
-    # only one should print out
-    print(sue)
-
-
-
+print(list(sues.keys())[0])
 
